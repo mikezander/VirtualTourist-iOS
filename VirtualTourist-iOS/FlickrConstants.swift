@@ -11,11 +11,20 @@ import Foundation
 extension FlickrClient{
 
     struct Constants {
+    
+         static let MaxItemsPerCollection = 21
         
         struct Flickr {
+
             static let APIScheme = "https"
             static let APIHost = "api.flickr.com"
             static let APIPath = "/services/rest"
+            
+            static let SearchBBoxHalfWidth = 0.3
+            static let SearchBBoxHalfHeight = 0.3
+            static let SearchLatRange = (-90.0, 90.0)
+            static let SearchLonRange = (-180.0, 180.0)
+            
         }
         
         struct FlickrParameterKeys {
