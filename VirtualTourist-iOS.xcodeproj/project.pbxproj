@@ -14,6 +14,7 @@
 		C41C59F61EFC3918006E4766 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C41C59F41EFC3918006E4766 /* LaunchScreen.storyboard */; };
 		C41C5A011EFC3918006E4766 /* VirtualTourist_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A001EFC3918006E4766 /* VirtualTourist_iOSTests.swift */; };
 		C41C5A0C1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A0B1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift */; };
+		C41C5A1A1EFC4408006E4766 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A191EFC4408006E4766 /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		C41C5A071EFC3918006E4766 /* VirtualTourist-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "VirtualTourist-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C41C5A0B1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTourist_iOSUITests.swift; sourceTree = "<group>"; };
 		C41C5A0D1EFC3918006E4766 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C41C5A191EFC4408006E4766 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				C41C59EB1EFC3918006E4766 /* AppDelegate.swift */,
 				C41C59ED1EFC3918006E4766 /* ViewController.swift */,
+				C41C5A191EFC4408006E4766 /* CoreDataStack.swift */,
 				C41C59EF1EFC3918006E4766 /* Main.storyboard */,
 				C41C59F21EFC3918006E4766 /* Assets.xcassets */,
 				C41C59F41EFC3918006E4766 /* LaunchScreen.storyboard */,
@@ -259,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C41C5A1A1EFC4408006E4766 /* CoreDataStack.swift in Sources */,
 				C41C59EE1EFC3918006E4766 /* ViewController.swift in Sources */,
 				C41C59EC1EFC3918006E4766 /* AppDelegate.swift in Sources */,
 			);
@@ -503,6 +507,7 @@
 				C41C5A121EFC3918006E4766 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C41C5A131EFC3918006E4766 /* Build configuration list for PBXNativeTarget "VirtualTourist-iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +516,7 @@
 				C41C5A151EFC3918006E4766 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C41C5A161EFC3918006E4766 /* Build configuration list for PBXNativeTarget "VirtualTourist-iOSUITests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +525,7 @@
 				C41C5A181EFC3918006E4766 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
