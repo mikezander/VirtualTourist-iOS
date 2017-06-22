@@ -15,6 +15,8 @@
 		C41C5A011EFC3918006E4766 /* VirtualTourist_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A001EFC3918006E4766 /* VirtualTourist_iOSTests.swift */; };
 		C41C5A0C1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A0B1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift */; };
 		C41C5A1A1EFC4408006E4766 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A191EFC4408006E4766 /* CoreDataStack.swift */; };
+		C41C5A1C1EFC63C7006E4766 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A1B1EFC63C7006E4766 /* FlickrClient.swift */; };
+		C41C5A1E1EFC63D3006E4766 /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A1D1EFC63D3006E4766 /* FlickrConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		C41C5A0B1EFC3918006E4766 /* VirtualTourist_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTourist_iOSUITests.swift; sourceTree = "<group>"; };
 		C41C5A0D1EFC3918006E4766 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C41C5A191EFC4408006E4766 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C41C5A1B1EFC63C7006E4766 /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
+		C41C5A1D1EFC63D3006E4766 /* FlickrConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 				C41C59F21EFC3918006E4766 /* Assets.xcassets */,
 				C41C59F41EFC3918006E4766 /* LaunchScreen.storyboard */,
 				C41C59F71EFC3918006E4766 /* Info.plist */,
+				C41C5A1B1EFC63C7006E4766 /* FlickrClient.swift */,
+				C41C5A1D1EFC63D3006E4766 /* FlickrConstants.swift */,
 			);
 			path = "VirtualTourist-iOS";
 			sourceTree = "<group>";
@@ -263,8 +269,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41C5A1A1EFC4408006E4766 /* CoreDataStack.swift in Sources */,
+				C41C5A1E1EFC63D3006E4766 /* FlickrConstants.swift in Sources */,
 				C41C59EE1EFC3918006E4766 /* ViewController.swift in Sources */,
 				C41C59EC1EFC3918006E4766 /* AppDelegate.swift in Sources */,
+				C41C5A1C1EFC63C7006E4766 /* FlickrClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
