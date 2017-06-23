@@ -77,7 +77,7 @@ class FlickrClient{
             guard let photoDictionary = parsedResult[Constants.ResponseKeys.Photos] as? [String:AnyObject], let photoArray = photoDictionary[Constants.ResponseKeys.Photo] as? [[String:AnyObject]] else {
                 return
             }
-
+            
             completionHandlerForGET(true, photoArray, nil)
    
         }
