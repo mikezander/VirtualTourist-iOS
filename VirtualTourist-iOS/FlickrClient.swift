@@ -12,18 +12,39 @@ class FlickrClient{
     
     let session = URLSession.shared
 
-    
-    func taskForGETMethod(parameters: [String:AnyObject], completionHandlerForGET: @escaping (_ result: [String:AnyObject]?, _ error: NSError?) -> Void) -> URLSessionDataTask {
-
+    func taskForGETPhotos(latitude: Double, longitude: Double, _ completionHandlerForGET: @escaping (_ success: Bool, _ data: [[String: AnyObject]]?, _ error: String?) -> Void) {
+        
+         let randomNumber = UInt64(arc4random_uniform(50) + 1)
+        
+        let methodParameters = [Constants.FlickrParameterKeys.Method: Constants.FlickrParameterValues.SearchMethod,
+                                Constants.FlickrParameterKeys.APIKey: Constants.FlickrParameterValues.APIKey,
+                                Constants.FlickrParameterKeys.Latitude: latitude,
+                                Constants.FlickrParameterKeys.Longitude: longitude,
+                                Constants.FlickrParameterKeys.Format: Constants.FlickrParameterValues.JSONFormat,
+                                Constants.FlickrParameterKeys.NoJSONCallBack: Constants.FlickrParameterValues.DisableJSONCallback,
+                                Constants.FlickrParameterKeys.BBox: returnBbox(latitude: latitude, longitude: longitude),
+                                Constants.FlickrParameterKeys.Extras: Constants.FlickrParameterValues.MediumURL,
+                                Constants.FlickrParameterKeys.PerPage: Constants.FlickrParameterValues.PerPageLimit,
+                                Constants.FlickrParameterKeys.Page: randomNumber]
+            as [String : Any]
+        
+        
+        
+        let urlString = Constants.Flickr.APIScheme +
+                        Constants.Flickr.APIHost +
+                        Constants.Flickr.APIPath +
+            escapedParameters(methodParameters as [String:AnyObject])
+        
+        let url = URL(string: urlString)!
         // Configure request with URL
-        let request = NSMutableURLRequest(url: buildFlickrURL(parameters))
+        let request = NSMutableURLRequest(url: url)
         // Make the request
         let task = session.dataTask(with: request as URLRequest){(data, response, error) in
             
             func sendError(error: String) {
                 print(error)
                 let userInfo = [NSLocalizedDescriptionKey: error]
-                completionHandlerForGET(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+                completionHandlerForGET(false, nil , String(describing:NSError(domain: "taskForGETPhotos", code: 1, userInfo: userInfo)))
             }
             
             /* GUARD: Was there an error? */
@@ -44,49 +65,70 @@ class FlickrClient{
                 return
             }
             
+            // parse JSON data into useable foundation objects
+            var parsedResult: [String:AnyObject]! = nil
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
+            } catch {
+                print("Could not parse JSON data")
+                
+            }
             
-          self.convertJSONDataWithCompletion(data, completionHandler: completionHandlerForGET)
-            
-            
+            guard let photoDictionary = parsedResult[Constants.ResponseKeys.Photos] as? [String:AnyObject], let photoArray = photoDictionary[Constants.ResponseKeys.Photo] as? [[String:AnyObject]] else {
+                return
+            }
+
+            completionHandlerForGET(true, photoArray, nil)
+   
         }
     
         task.resume()
-    
-        return task
-  
+ 
     }
-    
-    private func convertJSONDataWithCompletion(_ data: Data, completionHandler: (_ result: [String:AnyObject]?, _ error: NSError?) -> Void){
-        
-        var parsedResult: [String:AnyObject]! = nil
-        do {
-            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
-        } catch {
-            let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
-            completionHandler(nil, NSError(domain: "convertDataWithCompletionHandler", code: 1, userInfo: userInfo))
-            return
+
+    class func sharedInstance() -> FlickrClient {
+        struct Singleton {
+            static var sharedInstance = FlickrClient()
         }
-        
-        completionHandler(parsedResult, nil)
+        return Singleton.sharedInstance
     }
     
-    
-    
-    private func buildFlickrURL(_ parameters: [String:AnyObject]) -> URL {
-        
-        var components = URLComponents()
-        components.scheme = Constants.Flickr.APIScheme
-        components.host = Constants.Flickr.APIHost
-        components.path = Constants.Flickr.APIPath
-        components.queryItems = [URLQueryItem]()
-        
-        for (key, value) in parameters {
-            let queryItem = URLQueryItem(name: key, value: "\(value)")
-            components.queryItems!.append(queryItem)
+}
+
+extension FlickrClient {
+    // adds neccessary characters to url
+    public func escapedParameters(_ parameters: [String:AnyObject]) -> String {
+
+        if parameters.isEmpty {
+            return ""
+        } else {
+            var keyValuePairs = [String]()
+            
+            for (key, value) in parameters {
+                
+                // make sure that it is a string value
+                let stringValue = "\(value)"
+                
+                // escape it
+                let escapedValue = stringValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                
+                // append it
+                keyValuePairs.append(key + "=" + "\(escapedValue!)")
+                
+            }
+            
+            return "?\(keyValuePairs.joined(separator: "&"))"
         }
-        
-        return components.url!
     }
+
+    public func returnBbox(latitude: Double, longitude: Double) -> String {
+        
+        let longitudeMinimum = (longitude - Constants.LatLongOffset) >= -180 ? (longitude - Constants.LatLongOffset): -180
+        let latitudeMinimum = (latitude - Constants.LatLongOffset) >= -90 ? (latitude - Constants.LatLongOffset): -90
+        let longitudeMaximum = (longitude + Constants.LatLongOffset) <= 180 ? (longitude + Constants.LatLongOffset): -180
+        let latitudeMaximum = (latitude + Constants.LatLongOffset) <= 90 ? (latitude + Constants.LatLongOffset): -90
     
-    
+        return "\(longitudeMinimum),\(latitudeMinimum),\(longitudeMaximum),\(latitudeMaximum)"
+
+    }
 }

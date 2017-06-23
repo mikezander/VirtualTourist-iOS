@@ -12,13 +12,14 @@ extension FlickrClient{
 
     struct Constants {
     
-         static let MaxItemsPerCollection = 21
+        static let LatLongOffset = 5.00
+        
         
         struct Flickr {
 
-            static let APIScheme = "https"
+            static let APIScheme = "https://"
             static let APIHost = "api.flickr.com"
-            static let APIPath = "/services/rest"
+            static let APIPath = "/services/rest/"
             
             static let SearchBBoxHalfWidth = 0.3
             static let SearchBBoxHalfHeight = 0.3
@@ -35,13 +36,14 @@ extension FlickrClient{
             static let Radius = "radius"
             static let Format = "format"
             static let NoJSONCallBack = "nojsoncallback"
+            static let BBox = "bbox"
             static let Extras = "extras"
             static let PerPage = "per_page"
             static let Page = "page"
         }
         
         struct FlickrParameterValues {
-            static let APIKey = "28af64af1df718d65df6e2e7b26414cb"
+            static let APIKey = "62520e6b867cb632258aba5633984dee"
             static let APISectret = "4e4306259905e854"
             static let SearchMethod = "flickr.photos.search"
             static let RadiusAmount = "3"
