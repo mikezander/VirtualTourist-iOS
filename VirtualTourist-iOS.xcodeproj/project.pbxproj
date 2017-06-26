@@ -22,6 +22,7 @@
 		C41C5A291F018816006E4766 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A251F018816006E4766 /* Pin+CoreDataProperties.swift */; };
 		C41C5A2A1F018816006E4766 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A261F018816006E4766 /* Photo+CoreDataClass.swift */; };
 		C41C5A2B1F018816006E4766 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A271F018816006E4766 /* Photo+CoreDataProperties.swift */; };
+		C41C5A2D1F018EA3006E4766 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C5A2C1F018EA3006E4766 /* MapVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		C41C5A251F018816006E4766 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C41C5A261F018816006E4766 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C41C5A271F018816006E4766 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C41C5A2C1F018EA3006E4766 /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,16 +119,17 @@
 		C41C59EA1EFC3918006E4766 /* VirtualTourist-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				C41C5A211F017B57006E4766 /* Model.xcdatamodeld */,
 				C41C59EB1EFC3918006E4766 /* AppDelegate.swift */,
 				C41C59ED1EFC3918006E4766 /* ViewController.swift */,
 				C41C5A191EFC4408006E4766 /* CoreDataStack.swift */,
+				C41C5A1B1EFC63C7006E4766 /* FlickrClient.swift */,
+				C41C5A1D1EFC63D3006E4766 /* FlickrConstants.swift */,
+				C41C5A2C1F018EA3006E4766 /* MapVC.swift */,
 				C41C59EF1EFC3918006E4766 /* Main.storyboard */,
 				C41C59F21EFC3918006E4766 /* Assets.xcassets */,
 				C41C59F41EFC3918006E4766 /* LaunchScreen.storyboard */,
 				C41C59F71EFC3918006E4766 /* Info.plist */,
-				C41C5A1B1EFC63C7006E4766 /* FlickrClient.swift */,
-				C41C5A211F017B57006E4766 /* Model.xcdatamodeld */,
-				C41C5A1D1EFC63D3006E4766 /* FlickrConstants.swift */,
 			);
 			path = "VirtualTourist-iOS";
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				C41C5A1E1EFC63D3006E4766 /* FlickrConstants.swift in Sources */,
 				C41C5A281F018816006E4766 /* Pin+CoreDataClass.swift in Sources */,
 				C41C59EE1EFC3918006E4766 /* ViewController.swift in Sources */,
+				C41C5A2D1F018EA3006E4766 /* MapVC.swift in Sources */,
 				C41C59EC1EFC3918006E4766 /* AppDelegate.swift in Sources */,
 				C41C5A2A1F018816006E4766 /* Photo+CoreDataClass.swift in Sources */,
 				C41C5A1C1EFC63C7006E4766 /* FlickrClient.swift in Sources */,

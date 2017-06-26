@@ -12,10 +12,29 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    
+    let stack = CoreDataStack(modelName: "Model")!
+    
+    
+    func checkIfFirstLaunch() {
+        if UserDefaults.standard.bool(forKey: "hasLaunchedBefore") {
+            print("App has launched before")
+        } else {
+            print("This is the first launch ever!")
+            UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+            UserDefaults.standard.set( 37.1328392028809, forKey: "latitudeKey")
+            UserDefaults.standard.set(-95.7855834960937, forKey: "longitudeKey")
+            UserDefaults.standard.set(74.0091416724507, forKey: "latitudeDeltaKey")
+            UserDefaults.standard.set(61.2760567393223, forKey: "longitudeDeltaKey")
+            UserDefaults.standard.synchronize()
+        }
+    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        checkIfFirstLaunch()
         return true
     }
 
