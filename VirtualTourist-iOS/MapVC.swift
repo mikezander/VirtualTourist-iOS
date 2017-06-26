@@ -31,12 +31,14 @@ class MapVC: UIViewController, MKMapViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadMapView()
+        self.mapView.delegate = self
+        
         var objects: [Any]?
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let _ = delegate.stack
-       
-        self.mapView.delegate = self
-        
+
         do {
             try fetchedResultsController.performFetch()
             
@@ -48,7 +50,6 @@ class MapVC: UIViewController, MKMapViewDelegate{
         addAnnotationstoMap(objects: objects)
         
     }
-
 
 }
 
@@ -70,5 +71,27 @@ extension MapVC {
             }
             
         }
-}
+    }
+    
+    func loadMapView() {
+        // Firts app launch
+        if UserDefaults.standard.bool(forKey: "isFirstLaunch") {
+        
+        } else {
+            
+            // Load last map center and zoom level
+            let lat = UserDefaults.standard.double(forKey: "mapCenterLat")
+            let long = UserDefaults.standard.double(forKey: "mapCenterLong")
+            let spanLat = UserDefaults.standard.double(forKey: "mapSpanLat")
+            let spanLong = UserDefaults.standard.double(forKey: "mapSpanLong")
+            
+            let span = MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLong)
+            let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let region = MKCoordinateRegion(center: center, span: span)
+            mapView.setRegion(region, animated: false)
+        }
+    }
+
+
+
 }
