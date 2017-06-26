@@ -13,12 +13,13 @@ import MapKit
 class MapVC: UIViewController, MKMapViewDelegate{
 
     @IBOutlet weak var mapView: MKMapView!
+   
 
-     lazy var fetchedResultsController: NSFetchedResultsController <NSFetchRequestResult> = {
+    lazy var fetchedResultsController: NSFetchedResultsController <NSFetchRequestResult> = {
+        
         // Get the stack
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
-        
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.sortDescriptors = [NSSortDescriptor(key: "latitude", ascending: true),
@@ -51,6 +52,39 @@ class MapVC: UIViewController, MKMapViewDelegate{
         
     }
 
+    @IBAction func addPinTapped(_ sender: UILongPressGestureRecognizer) {
+    
+        if sender.state == UIGestureRecognizerState.ended {
+            let location = sender.location(in: mapView)
+            let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let stack = delegate.stack
+            
+            let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: stack.context)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            
+            // add pin to map
+            mapView.addAnnotation(annotation)
+            
+            stack.save()
+            
+            // fetch photos
+            
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PinVC") as! PinVC
+            
+            // Creating a navigation controller with viewController at the root of the navigation stack.
+            let navController = UINavigationController(rootViewController: viewController)
+            
+            self.present(navController, animated:true, completion: nil)
+            
+           // stack.fetchPhotos(pin: pin) {
+           //     stack.save()
+           // }
+        }
+    }
 }
 
 extension MapVC {
@@ -74,24 +108,13 @@ extension MapVC {
     }
     
     func loadMapView() {
-        // Firts app launch
-        if UserDefaults.standard.bool(forKey: "isFirstLaunch") {
+        let span = MKCoordinateSpanMake(UserDefaults.standard.double(forKey: "latitudeDeltaKey"), UserDefaults.standard.double(forKey: "longitudeDeltaKey"))
         
-        } else {
-            
-            // Load last map center and zoom level
-            let lat = UserDefaults.standard.double(forKey: "mapCenterLat")
-            let long = UserDefaults.standard.double(forKey: "mapCenterLong")
-            let spanLat = UserDefaults.standard.double(forKey: "mapSpanLat")
-            let spanLong = UserDefaults.standard.double(forKey: "mapSpanLong")
-            
-            let span = MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLong)
-            let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            let region = MKCoordinateRegion(center: center, span: span)
-            mapView.setRegion(region, animated: false)
-        }
+        let location = CLLocationCoordinate2D(latitude: UserDefaults.standard.double(forKey: "latitudeKey"), longitude: UserDefaults.standard.double(forKey: "longitudeKey"))
+        
+        let region = MKCoordinateRegion(center: location, span: span)
+        
+        self.mapView.setRegion(region, animated: true)
     }
-
-
 
 }
