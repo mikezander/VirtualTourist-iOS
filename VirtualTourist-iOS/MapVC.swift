@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import MapKit
 
-class MapVC: UIViewController, MKMapViewDelegate{
+class MapVC: UIViewController{
 
     @IBOutlet weak var mapView: MKMapView!
    
@@ -51,7 +51,8 @@ class MapVC: UIViewController, MKMapViewDelegate{
         addAnnotationstoMap(objects: objects)
         
     }
-
+  
+ 
     @IBAction func addPinTapped(_ sender: UILongPressGestureRecognizer) {
     
         if sender.state == UIGestureRecognizerState.ended {
@@ -72,7 +73,7 @@ class MapVC: UIViewController, MKMapViewDelegate{
             stack.save()
             
             // fetch photos
-            
+           /*
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PinVC") as! PinVC
             
             // Creating a navigation controller with viewController at the root of the navigation stack.
@@ -83,11 +84,12 @@ class MapVC: UIViewController, MKMapViewDelegate{
            // stack.fetchPhotos(pin: pin) {
            //     stack.save()
            // }
+ */
         }
     }
 }
 
-extension MapVC {
+extension MapVC: MKMapViewDelegate {
     
     public func addAnnotationstoMap(objects: [Any]?) {
         
@@ -107,7 +109,7 @@ extension MapVC {
         }
     }
     
-    func loadMapView() {
+    fileprivate func loadMapView() {
         let span = MKCoordinateSpanMake(UserDefaults.standard.double(forKey: "latitudeDeltaKey"), UserDefaults.standard.double(forKey: "longitudeDeltaKey"))
         
         let location = CLLocationCoordinate2D(latitude: UserDefaults.standard.double(forKey: "latitudeKey"), longitude: UserDefaults.standard.double(forKey: "longitudeKey"))
@@ -115,6 +117,18 @@ extension MapVC {
         let region = MKCoordinateRegion(center: location, span: span)
         
         self.mapView.setRegion(region, animated: true)
+        
+       
     }
+
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        UserDefaults.standard.set(mapView.region.center.latitude, forKey: "latitudeKey")
+        UserDefaults.standard.set(mapView.region.center.longitude, forKey: "longitudeKey")
+        UserDefaults.standard.set(mapView.region.span.latitudeDelta, forKey: "latitudeDeltaKey")
+        UserDefaults.standard.set(mapView.region.span.longitudeDelta, forKey: "longitudeDeltaKey")
+        UserDefaults.standard.synchronize()
+    }
+    
+   
 
 }
