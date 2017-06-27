@@ -13,8 +13,9 @@ import MapKit
 class MapVC: UIViewController{
 
     @IBOutlet weak var mapView: MKMapView!
-   
-
+    
+    
+  
     lazy var fetchedResultsController: NSFetchedResultsController <NSFetchRequestResult> = {
         
         // Get the stack
@@ -33,12 +34,10 @@ class MapVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadMapView()
+        loadMapViewDefaults()
         self.mapView.delegate = self
         
         var objects: [Any]?
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let _ = delegate.stack
 
         do {
             try fetchedResultsController.performFetch()
@@ -62,29 +61,17 @@ class MapVC: UIViewController{
             let delegate = UIApplication.shared.delegate as! AppDelegate
             let stack = delegate.stack
             
-            let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: stack.context)
+            _ = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: stack.context)
+            
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             
             // add pin to map
             mapView.addAnnotation(annotation)
-            
+ 
             stack.save()
-            
-            // fetch photos
-           /*
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PinVC") as! PinVC
-            
-            // Creating a navigation controller with viewController at the root of the navigation stack.
-            let navController = UINavigationController(rootViewController: viewController)
-            
-            self.present(navController, animated:true, completion: nil)
-            
-           // stack.fetchPhotos(pin: pin) {
-           //     stack.save()
-           // }
- */
+
         }
     }
 }
@@ -109,7 +96,7 @@ extension MapVC: MKMapViewDelegate {
         }
     }
     
-    fileprivate func loadMapView() {
+    fileprivate func loadMapViewDefaults() {
         let span = MKCoordinateSpanMake(UserDefaults.standard.double(forKey: "latitudeDeltaKey"), UserDefaults.standard.double(forKey: "longitudeDeltaKey"))
         
         let location = CLLocationCoordinate2D(latitude: UserDefaults.standard.double(forKey: "latitudeKey"), longitude: UserDefaults.standard.double(forKey: "longitudeKey"))
@@ -120,6 +107,60 @@ extension MapVC: MKMapViewDelegate {
         
        
     }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        mapView.deselectAnnotation(view.annotation, animated: false)
+        
+        let latpredicate = NSPredicate(format: "latitude == %lf", (view.annotation?.coordinate.latitude)!)
+        let longpredicate = NSPredicate(format: "longitude == %lf", (view.annotation?.coordinate.longitude)!)
+        let andrequest = NSCompoundPredicate(type: .and, subpredicates: [latpredicate, longpredicate])
+        
+        fetchedResultsController.fetchRequest.predicate = andrequest
+        
+        do {
+            try fetchedResultsController.performFetch()
+            
+            let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
+           
+            moveToPhotosVC(fetchcontroller: fetchedResultsController, pin: pin, view: view)
+    
+        } catch let err {
+            print(err)
+            
+        }
+       
+    
+    }
+    
+    public func moveToPhotosVC(fetchcontroller: NSFetchedResultsController <NSFetchRequestResult>, pin: Pin, view: MKAnnotationView) {
+
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        let fr = NSFetchRequest<Photo>(entityName: "Photo")
+        
+        fr.sortDescriptors = []
+        
+        let pred = NSPredicate(format: "pin = %@", pin)
+        
+        fr.predicate = pred
+        
+        let fc = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil , cacheName: nil)
+        
+        let controller = self.storyboard?.instantiateViewController(withIdentifier:"PhotosVC") as! PhotosVC
+        
+        do {
+            try fc.performFetch()
+        } catch let err  {
+            print(err)
+        }
+        
+        controller.fetchedResultController = fc
+        controller.pin = pin
+        
+        self.navigationController?.pushViewController(controller, animated: true)
+        
+    }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         UserDefaults.standard.set(mapView.region.center.latitude, forKey: "latitudeKey")
@@ -128,7 +169,5 @@ extension MapVC: MKMapViewDelegate {
         UserDefaults.standard.set(mapView.region.span.longitudeDelta, forKey: "longitudeDeltaKey")
         UserDefaults.standard.synchronize()
     }
-    
-   
 
 }

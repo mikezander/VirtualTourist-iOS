@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="d7x-Go-LSG">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -37,6 +37,7 @@
                             <constraint firstItem="wtV-th-ycA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nEc-Jw-s1J"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="UYM-Kg-RyV"/>
                     <connections>
                         <outlet property="mapView" destination="wtV-th-ycA" id="NUG-oM-Gic"/>
                     </connections>
@@ -48,12 +49,12 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="116" y="123.68815592203899"/>
+            <point key="canvasLocation" x="97" y="125"/>
         </scene>
-        <!--PinVC-->
+        <!--PhotosVC-->
         <scene sceneID="AiJ-5j-jgn">
             <objects>
-                <viewController storyboardIdentifier="PinVC" id="M04-d7-tEU" customClass="PinVC" customModule="VirtualTourist_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotosVC" id="M04-d7-tEU" customClass="PhotosVC" customModule="VirtualTourist_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="paj-dD-GOo"/>
                         <viewControllerLayoutGuide type="bottom" id="YQ6-fS-cBb"/>
@@ -106,7 +107,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D41-kQ-W2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1704.8" y="125.4872563718141"/>
+            <point key="canvasLocation" x="991" y="125"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="k5Z-rj-JJ6">
+            <objects>
+                <navigationController id="d7x-Go-LSG" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Jtt-tg-TSu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="DQt-Lp-gzk"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sgg-wJ-a3a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-785" y="125"/>
         </scene>
     </scenes>
 </document>
