@@ -27,9 +27,9 @@ extension FlickrClient{
             
                     let imageUrl = each[Constants.FlickrParameterValues.MediumURL] as! String
                     print(imageUrl)
-                    _ = Photo(image: nil, imageURL: imageUrl, context: stack.context)
+                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
                     
-                    //pin.addToPhotos(photo) // check this addToPhotos method
+                    pin.addToPhotos(photo) // check this addToPhotos method
                     
                     stack.save()
                     

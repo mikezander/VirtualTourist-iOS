@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(Pin)
+
 public class Pin: NSManagedObject {
 
     convenience init(lat: Double, long: Double, isDownloaded: Bool, context: NSManagedObjectContext) {
@@ -22,4 +22,5 @@ public class Pin: NSManagedObject {
             fatalError("Uable to find entity name")
         }
     }
+    
 }
