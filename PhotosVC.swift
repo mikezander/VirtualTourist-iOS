@@ -22,9 +22,12 @@ class PhotosVC: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-     
-        
+        photosCollectionView.allowsMultipleSelection = true
+
+       
     }
+    
+  
     
     
 }

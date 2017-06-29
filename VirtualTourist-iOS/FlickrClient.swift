@@ -48,7 +48,7 @@ class FlickrClient{
             }
             
             /* GUARD: Was there an error? */
-            guard (error == nil) else {
+            guard error == nil else {
                 sendError(error: "There was an error with your request: \(error?.localizedDescription)")
                 return
             }
