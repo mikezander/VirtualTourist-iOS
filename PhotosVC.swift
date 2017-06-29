@@ -11,7 +11,7 @@ import MapKit
 import UIKit
 import CoreData
 
-class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+class PhotosVC: UIViewController{
 
     var pin: Pin?
     var fetchedResultController: NSFetchedResultsController <Photo>!

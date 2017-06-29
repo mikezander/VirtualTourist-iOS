@@ -57,7 +57,7 @@ class MapVC: UIViewController{
             let delegate = UIApplication.shared.delegate as! AppDelegate
             let stack = delegate.stack
             
-            _ = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: stack.context)
+            _ = Pin(lat: coordinate.latitude, long: coordinate.longitude, isDownloaded: false, context: stack.context)
 
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
