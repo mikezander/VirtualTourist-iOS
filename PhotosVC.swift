@@ -21,4 +21,6 @@ class PhotosVC: UIViewController{
         print(pin?.latitude)
         print(pin?.longitude)
     }
+    
+    
 }

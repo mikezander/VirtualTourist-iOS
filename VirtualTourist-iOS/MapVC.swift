@@ -13,9 +13,7 @@ import MapKit
 class MapVC: UIViewController{
 
     @IBOutlet weak var mapView: MKMapView!
-    
-    
-  
+
     lazy var fetchedResultsController: NSFetchedResultsController <NSFetchRequestResult> = {
         
         // Get the stack
@@ -48,10 +46,8 @@ class MapVC: UIViewController{
         }
         
         addAnnotationstoMap(objects: objects)
-        
     }
-  
- 
+
     @IBAction func addPinTapped(_ sender: UILongPressGestureRecognizer) {
     
         if sender.state == UIGestureRecognizerState.ended {
@@ -62,8 +58,7 @@ class MapVC: UIViewController{
             let stack = delegate.stack
             
             _ = Pin(lat: coordinate.latitude, long: coordinate.longitude, context: stack.context)
-            
-            
+
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             
@@ -71,7 +66,6 @@ class MapVC: UIViewController{
             mapView.addAnnotation(annotation)
  
             stack.save()
-
         }
     }
 }
@@ -104,32 +98,26 @@ extension MapVC: MKMapViewDelegate {
         let region = MKCoordinateRegion(center: location, span: span)
         
         self.mapView.setRegion(region, animated: true)
-        
-       
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         mapView.deselectAnnotation(view.annotation, animated: false)
         
-        let latpredicate = NSPredicate(format: "latitude == %lf", (view.annotation?.coordinate.latitude)!)
-        let longpredicate = NSPredicate(format: "longitude == %lf", (view.annotation?.coordinate.longitude)!)
-        let andrequest = NSCompoundPredicate(type: .and, subpredicates: [latpredicate, longpredicate])
+        let latPredicate = NSPredicate(format: "latitude == %lf", (view.annotation?.coordinate.latitude)!)
+        let longPredicate = NSPredicate(format: "longitude == %lf", (view.annotation?.coordinate.longitude)!)
+        let andRequest = NSCompoundPredicate(type: .and, subpredicates: [latPredicate, longPredicate])
         
-        fetchedResultsController.fetchRequest.predicate = andrequest
+        fetchedResultsController.fetchRequest.predicate = andRequest
         
         do {
             try fetchedResultsController.performFetch()
-            
-            let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
-           
-            moveToPhotosVC(fetchcontroller: fetchedResultsController, pin: pin, view: view)
-    
         } catch let err {
             print(err)
-            
         }
-       
-    
+
+        let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
+        
+        moveToPhotosVC(fetchcontroller: fetchedResultsController, pin: pin, view: view)
     }
     
     public func moveToPhotosVC(fetchcontroller: NSFetchedResultsController <NSFetchRequestResult>, pin: Pin, view: MKAnnotationView) {
@@ -154,12 +142,11 @@ extension MapVC: MKMapViewDelegate {
         } catch let err  {
             print(err)
         }
-        
+        // inject into PhotosVC
         controller.fetchedResultController = fc
         controller.pin = pin
         
         self.navigationController?.pushViewController(controller, animated: true)
-        
     }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
