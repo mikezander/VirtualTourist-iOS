@@ -25,11 +25,8 @@ class FlickrClient{
                                 Constants.FlickrParameterKeys.BBox: returnBbox(latitude: latitude, longitude: longitude),
                                 Constants.FlickrParameterKeys.Extras: Constants.FlickrParameterValues.MediumURL,
                                 Constants.FlickrParameterKeys.PerPage: Constants.FlickrParameterValues.PerPageLimit,
-                                Constants.FlickrParameterKeys.Page: randomNumber]
-            as [String : Any]
-        
-        
-        
+                                Constants.FlickrParameterKeys.Page: randomNumber] as [String : Any]
+
         let urlString = Constants.Flickr.APIScheme +
                         Constants.Flickr.APIHost +
                         Constants.Flickr.APIPath +

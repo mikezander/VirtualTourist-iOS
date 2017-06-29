@@ -32,7 +32,7 @@ extension FlickrClient{
             static let Method = "method"
             static let APIKey = "api_key"
             static let Latitude = "lat"
-            static let Longitude = "lon"
+            static let Longitude = "long"
             static let Radius = "radius"
             static let Format = "format"
             static let NoJSONCallBack = "nojsoncallback"
@@ -43,8 +43,7 @@ extension FlickrClient{
         }
         
         struct FlickrParameterValues {
-            static let APIKey = "62520e6b867cb632258aba5633984dee"
-            static let APISectret = "4e4306259905e854"
+            static let APIKey = "397f1a17902d247b1f7f703c34b06030"
             static let SearchMethod = "flickr.photos.search"
             static let RadiusAmount = "3"
             static let JSONFormat = "json"

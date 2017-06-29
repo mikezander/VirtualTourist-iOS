@@ -2,7 +2,7 @@
 //  Pin+CoreDataClass.swift
 //  VirtualTourist-iOS
 //
-//  Created by Michael Alexander on 6/28/17.
+//  Created by Michael Alexander on 6/29/17.
 //  Copyright © 2017 Michael Alexander. All rights reserved.
 //
 
@@ -22,5 +22,4 @@ public class Pin: NSManagedObject {
             fatalError("Uable to find entity name")
         }
     }
-    
 }

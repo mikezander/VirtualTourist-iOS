@@ -13,7 +13,7 @@ import CoreData
 
 class PhotosVC: UIViewController{
 
-    var pin: Pin! 
+    var pin: Pin!
     var fetchedResultController: NSFetchedResultsController <Photo>!
 
     @IBOutlet weak var mapView: MKMapView!
@@ -25,9 +25,8 @@ class PhotosVC: UIViewController{
         super.viewDidLoad()
         addPinToView()
         
-       /* if !(pin.isDownloaded){
-        
-            if !(FlickrClient.sharedInstance().getPhotosForPin(pin: pin)){
+        if !(pin.isDownloaded){
+            /*if !(FlickrClient.sharedInstance().getPhotosForPin(pin: pin)){
                 
                 performUIUpdatesOnMain {
                     let label = UILabel()
@@ -36,15 +35,21 @@ class PhotosVC: UIViewController{
                 }
                 
                 print("photots found!")
+            }*/
+            if FlickrClient.sharedInstance().getPhotosForPin(pin: pin) == 0 {
+                performUIUpdatesOnMain {
+                    let label = UILabel()
+                    label.frame = CGRect(x:self.view.frame.size.width/2,y: 30,width: 300,height: 60)
+                    label.text = "No photos found for this location."
+                }
             }
-            
- 
+            print("photos found!")
             
         }else{
         
             
         }
-*/
+
        
     }
        

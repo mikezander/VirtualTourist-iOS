@@ -2,7 +2,7 @@
 //  Pin+CoreDataProperties.swift
 //  VirtualTourist-iOS
 //
-//  Created by Michael Alexander on 6/28/17.
+//  Created by Michael Alexander on 6/29/17.
 //  Copyright © 2017 Michael Alexander. All rights reserved.
 //
 
@@ -19,10 +19,9 @@ extension Pin {
     @NSManaged public var isDownloaded: Bool
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
-    @NSManaged public var photos: Photo?
+    @NSManaged public var photos: NSSet?//Photo?
 
 }
-
 // MARK: Generated accessors for photos
 extension Pin {
     
