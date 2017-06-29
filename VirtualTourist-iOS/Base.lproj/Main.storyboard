@@ -113,9 +113,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="XSE-5y-jTH"/>
                     <connections>
+                        <outlet property="collectionView" destination="jKD-Ni-OMi" id="f1O-XB-24w"/>
                         <outlet property="mapView" destination="aOq-Pf-xch" id="WFA-An-vRe"/>
                         <outlet property="newCollectionBtn" destination="yiC-9d-Xj0" id="iRs-Ix-3Tx"/>
-                        <outlet property="photosCollectionView" destination="jKD-Ni-OMi" id="rdw-VT-Bti"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D41-kQ-W2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
