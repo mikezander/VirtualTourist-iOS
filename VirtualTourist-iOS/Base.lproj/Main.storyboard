@@ -70,7 +70,7 @@
                                 </constraints>
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="jKD-Ni-OMi">
-                                <rect key="frame" x="0.0" y="201" width="375" height="466"/>
+                                <rect key="frame" x="0.0" y="201" width="375" height="426"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1cU-Yz-DLR">
                                     <size key="itemSize" width="50" height="50"/>
@@ -89,19 +89,34 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yiC-9d-Xj0">
+                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Zmd-Nz-naO"/>
+                                </constraints>
+                                <state key="normal" title="New Collection"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jKD-Ni-OMi" firstAttribute="top" secondItem="aOq-Pf-xch" secondAttribute="bottom" constant="-1" id="1Ff-bR-IQ7"/>
                             <constraint firstAttribute="trailing" secondItem="aOq-Pf-xch" secondAttribute="trailing" id="C4Z-x2-OZ2"/>
+                            <constraint firstItem="yiC-9d-Xj0" firstAttribute="leading" secondItem="Gdd-Eu-GID" secondAttribute="leading" id="Dv3-c0-vEU"/>
                             <constraint firstItem="aOq-Pf-xch" firstAttribute="leading" secondItem="Gdd-Eu-GID" secondAttribute="leading" id="FYP-bs-8jZ"/>
+                            <constraint firstItem="YQ6-fS-cBb" firstAttribute="top" secondItem="yiC-9d-Xj0" secondAttribute="bottom" id="Hiv-PG-uQJ"/>
                             <constraint firstItem="aOq-Pf-xch" firstAttribute="top" secondItem="Gdd-Eu-GID" secondAttribute="top" id="R6h-pw-jx3"/>
                             <constraint firstItem="jKD-Ni-OMi" firstAttribute="leading" secondItem="Gdd-Eu-GID" secondAttribute="leading" id="Syp-bP-nSz"/>
-                            <constraint firstItem="YQ6-fS-cBb" firstAttribute="top" secondItem="jKD-Ni-OMi" secondAttribute="bottom" id="VZn-ez-IQR"/>
+                            <constraint firstItem="yiC-9d-Xj0" firstAttribute="top" secondItem="jKD-Ni-OMi" secondAttribute="bottom" id="bzN-8L-wcW"/>
                             <constraint firstAttribute="trailing" secondItem="jKD-Ni-OMi" secondAttribute="trailing" id="wqu-m7-AOa"/>
+                            <constraint firstAttribute="trailing" secondItem="yiC-9d-Xj0" secondAttribute="trailing" id="z0g-6n-s3f"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="XSE-5y-jTH"/>
+                    <connections>
+                        <outlet property="mapView" destination="aOq-Pf-xch" id="WFA-An-vRe"/>
+                        <outlet property="newCollectionBtn" destination="yiC-9d-Xj0" id="iRs-Ix-3Tx"/>
+                        <outlet property="photosCollectionView" destination="jKD-Ni-OMi" id="rdw-VT-Bti"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D41-kQ-W2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

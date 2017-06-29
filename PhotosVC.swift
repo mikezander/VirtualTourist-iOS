@@ -11,15 +11,19 @@ import MapKit
 import UIKit
 import CoreData
 
-class PhotosVC: UIViewController{
+class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
 
-    var pin: Pin? = nil
+    var pin: Pin?
     var fetchedResultController: NSFetchedResultsController <Photo>!
 
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var photosCollectionView: UICollectionView!
+    @IBOutlet weak var newCollectionBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(pin?.latitude)
-        print(pin?.longitude)
+     
+        
     }
     
     
