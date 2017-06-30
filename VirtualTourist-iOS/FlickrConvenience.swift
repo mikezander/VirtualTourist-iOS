@@ -13,23 +13,24 @@ import CoreData
 extension FlickrClient{
 
     
-    public func getPhotosForPin(pin: Pin) -> Int{
-       var count = Int()
+    public func getPhotosForPin(pin: Pin){
+        
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
         
         FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
             
             if let data = data{
-                count = data.count
-               
+
                 for each in data{
-            
+                    
                     let imageUrl = each[Constants.FlickrParameterValues.MediumURL] as! String
                     print(imageUrl)
                     let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
                     
-                    pin.addToPhotos(photo) // check this addToPhotos method
+                    pin.addToPhotos(photo)
+                    
+                    
                     
                     stack.save()
                     
@@ -39,8 +40,7 @@ extension FlickrClient{
             pin.isDownloaded = true
             
         }
-       
-      return count
+      
         
     }
 
