@@ -12,6 +12,8 @@ import UIKit
 import CoreData
 
 class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+    static let shared = PhotosVC()
+    var isEmpty = true
     
     var pin: Pin!
     var fetchedResultController: NSFetchedResultsController <Photo>!
@@ -23,32 +25,25 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     fileprivate let cellsPerRow: CGFloat = 3
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchedResultController.delegate = self
+       
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        fetchedResultController.delegate = self
+        photoCollectionView.allowsMultipleSelection = true
+        
         addPinToView()
-       
-        performUIUpdatesOnMain {
-            self.photoCollectionView.reloadData()
-        }
         
+       print(isEmpty)
         
-            
-            
-
+        self.photoCollectionView.reloadData()
+        
     }
-        public func noPhotosFoundLabel(){
-        let label = UILabel()
-        label.text = "No photos found for this location."
-        label.textAlignment = .center
-        label.frame = CGRect(x:self.view.frame.size.width/10,y: self.view.frame.size.height/2,width: 300,height: 60)
-        
-        self.view.addSubview(label)
-    
-    }
-    
+ 
     public func addPinToView() {
         let lat = CLLocationDegrees(pin.latitude)
         let long = CLLocationDegrees(pin.longitude)
@@ -60,11 +55,20 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
         mapView.setRegion(region, animated: true)
     }
+    
+    public func noPhotosFoundLabel(){
+        let label = UILabel()
+        label.text = "No photos found for this location."
+        label.textAlignment = .center
+        label.frame = CGRect(x:self.view.frame.size.width/10,y: self.view.frame.size.height/2,width: 300,height: 60)
+        
+        self.view.addSubview(label)
+        
+    }
   
+    //MARK: Collection view delegate & data source methods
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        print("running3")
         if let fc = fetchedResultController {
-            print((fc.sections?.count)!)
             return (fc.sections?.count)!
         } else {
             return 0
@@ -72,17 +76,14 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("running1")
         if let fc = fetchedResultController {
             return fc.sections![section].numberOfObjects
-            
         } else {
             return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("running2")
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
         
@@ -95,17 +96,19 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     
             cell.photoImageView.image = image
         }else {
-            //cell.setUpForPlaceholder()
+            performUIUpdatesOnMain {
+               //activity indicator start animating
+            }
+            
             FlickrClient.sharedInstance().loadPhotoFromURL(imagePath: photo.imageURL!) { (imageData, error) in
                 guard error == nil else { print("Error loading photo from URL-\(error)"); return}
                 
                     photo.imageData = imageData as NSData?
-               
                     stack.save()
             }
         }
         
-        
+        // ai stop animating
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -147,6 +147,7 @@ extension MapVC: MKMapViewDelegate {
         } catch let err  {
             print(err)
         }
+       
         // inject into PhotosVC
         controller.fetchedResultController = fc
         controller.pin = pin

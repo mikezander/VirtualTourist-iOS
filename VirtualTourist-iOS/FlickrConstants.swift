@@ -11,10 +11,7 @@ import Foundation
 extension FlickrClient{
 
     struct Constants {
-    
-        static let LatLongOffset = 5.00
-        
-        
+ 
         struct Flickr {
 
             static let APIScheme = "https://"

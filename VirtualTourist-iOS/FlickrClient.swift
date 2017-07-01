@@ -10,8 +10,10 @@ import Foundation
 
 class FlickrClient{
     
+    var count = Int()
+    
     let session = URLSession.shared
-
+   
     func taskForGETPhotos(latitude: Double, longitude: Double, _ completionHandlerForGET: @escaping (_ success: Bool, _ data: [[String: AnyObject]]?, _ error: String?) -> Void) {
         
          let randomNumber = UInt64(arc4random_uniform(50) + 1)
@@ -74,7 +76,7 @@ class FlickrClient{
             guard let photoDictionary = parsedResult[Constants.ResponseKeys.Photos] as? [String:AnyObject], let photoArray = photoDictionary[Constants.ResponseKeys.Photo] as? [[String:AnyObject]] else {
                 return
             }
-            
+
             completionHandlerForGET(true, photoArray, nil)
    
         }
@@ -120,10 +122,10 @@ extension FlickrClient {
 
     public func returnBbox(latitude: Double, longitude: Double) -> String {
         
-        let longitudeMinimum = (longitude - Constants.LatLongOffset) >= -180 ? (longitude - Constants.LatLongOffset): -180
-        let latitudeMinimum = (latitude - Constants.LatLongOffset) >= -90 ? (latitude - Constants.LatLongOffset): -90
-        let longitudeMaximum = (longitude + Constants.LatLongOffset) <= 180 ? (longitude + Constants.LatLongOffset): -180
-        let latitudeMaximum = (latitude + Constants.LatLongOffset) <= 90 ? (latitude + Constants.LatLongOffset): -90
+        let longitudeMinimum = max(longitude - Constants.Flickr.SearchBBoxHalfWidth, Constants.Flickr.SearchLonRange.0)
+        let latitudeMinimum = max(latitude - Constants.Flickr.SearchBBoxHalfHeight, Constants.Flickr.SearchLatRange.0)
+        let longitudeMaximum = min(longitude + Constants.Flickr.SearchBBoxHalfWidth, Constants.Flickr.SearchLonRange.1)
+        let latitudeMaximum = min(latitude + Constants.Flickr.SearchBBoxHalfHeight, Constants.Flickr.SearchLatRange.1)
     
         return "\(longitudeMinimum),\(latitudeMinimum),\(longitudeMaximum),\(latitudeMaximum)"
 
