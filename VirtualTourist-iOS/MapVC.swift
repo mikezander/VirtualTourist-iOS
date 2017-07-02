@@ -116,11 +116,7 @@ extension MapVC: MKMapViewDelegate {
         }
 
         let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
-        
-        if !pin.isDownloaded{
-            FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
-        }
-        
+      
         moveToPhotosVC(fetchcontroller: fetchedResultsController, pin: pin, view: view)
     }
     
@@ -133,7 +129,7 @@ extension MapVC: MKMapViewDelegate {
         let fr = NSFetchRequest<Photo>(entityName: "Photo")
         
         fr.sortDescriptors = []
-        
+
         let pred = NSPredicate(format: "pin = %@", pin)
         
         fr.predicate = pred
@@ -147,11 +143,12 @@ extension MapVC: MKMapViewDelegate {
         } catch let err  {
             print(err)
         }
-       
+        
+        
         // inject into PhotosVC
         controller.fetchedResultController = fc
         controller.pin = pin
-        
+
         self.navigationController?.pushViewController(controller, animated: true)
     }
 

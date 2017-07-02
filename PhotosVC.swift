@@ -12,9 +12,6 @@ import UIKit
 import CoreData
 
 class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
-    static let shared = PhotosVC()
-    var isEmpty = true
-    
     var pin: Pin!
     var fetchedResultController: NSFetchedResultsController <Photo>!
 
@@ -38,12 +35,52 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         addPinToView()
         
-       print(isEmpty)
-        
+        if !pin.isDownloaded{
+            getPhotosForPin(pin: pin)
+        }
         self.photoCollectionView.reloadData()
         
-    }
+      
  
+    }
+    public func getPhotosForPin(pin: Pin){
+        
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
+
+            guard data!.count != 0 else{
+                self.performUIUpdatesOnMain {
+                    self.noPhotosFoundLabel()
+                }
+                return
+            }
+            
+            if let data = data{
+                
+                for each in data{
+                    
+                    let imageUrl = each["url_m"] as! String
+                    
+                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
+                    
+                    pin.addToPhotos(photo)
+                    
+                    
+                    stack.save()
+                    
+                }
+                
+            }
+            
+            pin.isDownloaded = true
+ 
+        }
+        
+        
+    }
+
     public func addPinToView() {
         let lat = CLLocationDegrees(pin.latitude)
         let long = CLLocationDegrees(pin.longitude)
@@ -63,9 +100,8 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         label.frame = CGRect(x:self.view.frame.size.width/10,y: self.view.frame.size.height/2,width: 300,height: 60)
         
         self.view.addSubview(label)
-        
     }
-  
+
     //MARK: Collection view delegate & data source methods
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if let fc = fetchedResultController {
@@ -86,31 +122,37 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
-        
-         let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
+ 
+        let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
         let photo = fetchedResultController!.object(at: indexPath)
         
         if let imageData = photo.imageData {
+
             let image = UIImage(data: imageData as Data)
     
             cell.photoImageView.image = image
-        }else {
+        }else{
             performUIUpdatesOnMain {
                //activity indicator start animating
             }
             
             FlickrClient.sharedInstance().loadPhotoFromURL(imagePath: photo.imageURL!) { (imageData, error) in
-                guard error == nil else { print("Error loading photo from URL-\(error)"); return}
+                guard error == nil else {
+                    print("Error loading photo from URL-\(error)"); return}
                 
                     photo.imageData = imageData as NSData?
                     stack.save()
+                
             }
         }
         
         // ai stop animating
         return cell
-    }
+            
+        }
+            
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         fetchedResultController.managedObjectContext.delete(fetchedResultController.object(at: indexPath))
@@ -122,7 +164,9 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         }
         
     }
+    
 }
+
 
 extension PhotosVC: UICollectionViewDelegateFlowLayout {
 
