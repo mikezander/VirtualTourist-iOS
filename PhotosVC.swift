@@ -53,8 +53,24 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         }
 
         performUIUpdatesOnMain { self.photoCollectionView.reloadData() }
+        
+        photoCollectionView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.old, context: nil)
 
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+       photoCollectionView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let observedObject = object as? UICollectionView, observedObject == photoCollectionView {
+            //collection view is done loading
+            performUIUpdatesOnMain { self.newCollectionBtn.isEnabled = true }
+        }
+    }
+    
+    
     public func getPhotosForPin(pin: Pin){
         
         let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -77,8 +93,7 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
                     
                     pin.addToPhotos(photo)
-                    
-                    
+
                     stack.save()
                     
                 }
@@ -169,6 +184,7 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         }else{
             performUIUpdatesOnMain {
+                self.newCollectionBtn.isEnabled = false
                 cell.activityIndicator.startAnimating()
                 cell.placeHolderView.isHidden = false
             }
@@ -185,7 +201,9 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
                 }
                 
             }
+            
         }
+        
         
         return cell
         
