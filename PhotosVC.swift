@@ -48,10 +48,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
        
         fetchPhotos()
 
-        if !pin.isDownloaded{
-            getPhotosForPin(pin: pin)
-        }
-
         performUIUpdatesOnMain { self.photoCollectionView.reloadData() }
         
         photoCollectionView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.old, context: nil)
@@ -68,40 +64,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
             //collection view is done loading
             performUIUpdatesOnMain { self.newCollectionBtn.isEnabled = true }
         }
-    }
-    
-    
-    public func getPhotosForPin(pin: Pin){
-        
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
-        
-        FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
-            
-            guard data!.count != 0 else{
-                self.performUIUpdatesOnMain {
-                    self.noPhotosFoundLabel()
-                }
-                return
-            }
-            if let data = data{
-                
-                for each in data{
-                    
-                    let imageUrl = each["url_m"] as! String
-                    
-                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
-                    
-                    pin.addToPhotos(photo)
-
-                    stack.save()
-                    
-                }
-            }
-            
-            pin.isDownloaded = true
-        }
-        
     }
 
     func fetchPhotos() {
@@ -150,7 +112,8 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         pin.isDownloaded = false
         
-        getPhotosForPin(pin: pin)
+        FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
+        
         
         pin.isDownloaded = true
         
@@ -162,6 +125,10 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
  
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sections = fetchedResultsController.sections![section]
+        
+        if sections.numberOfObjects == 0{
+            performUIUpdatesOnMain { self.noPhotosFoundLabel()}
+        }
         return sections.numberOfObjects
     }
     
@@ -193,18 +160,19 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
                 guard error == nil else {
                     print("Error loading photo from URL-\(error)"); return}
                 
-                photo.imageData = imageData as NSData?
-                stack.save()
+                 photo.imageData = imageData as NSData?
+                 stack.save()
+                
                 self.performUIUpdatesOnMain {
-                    cell.activityIndicator.isHidden = true
+                   
+                    cell.activityIndicator.hidesWhenStopped = true
                     cell.activityIndicator.stopAnimating()
                 }
-                
+    
             }
             
         }
-        
-        
+
         return cell
         
         }

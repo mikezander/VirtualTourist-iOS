@@ -58,14 +58,16 @@ class MapVC: UIViewController{
             let delegate = UIApplication.shared.delegate as! AppDelegate
             let stack = delegate.stack
             
-            _ = Pin(lat: coordinate.latitude, long: coordinate.longitude, isDownloaded: false, context: stack.context)
+            let pin = Pin(lat: coordinate.latitude, long: coordinate.longitude, isDownloaded: false, context: stack.context)
 
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             
             // add pin to map
             mapView.addAnnotation(annotation)
- 
+
+            FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
+
             stack.save()
         }
     }
