@@ -114,6 +114,9 @@
                                     <constraint firstAttribute="height" constant="40" id="Zmd-Nz-naO"/>
                                 </constraints>
                                 <state key="normal" title="New Collection"/>
+                                <connections>
+                                    <action selector="newCollectionPressed:" destination="M04-d7-tEU" eventType="touchUpInside" id="fHg-BO-Jwu"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

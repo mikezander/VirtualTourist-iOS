@@ -31,50 +31,27 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         photoCollectionView.allowsMultipleSelection = true
         
         addPinToView()
-        
-        if !pin.isDownloaded{
-            getPhotosForPin(pin: pin)
-        }
+
         self.photoCollectionView.reloadData()
         
       
  
     }
-    public func getPhotosForPin(pin: Pin){
-        
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
-        
-        FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
-
-            guard data!.count != 0 else{
-                self.performUIUpdatesOnMain {
-                    self.noPhotosFoundLabel()
-                }
-                return
-            }
-            
-            if let data = data{
-                
-                for each in data{
-                    
-                    let imageUrl = each["url_m"] as! String
-                    
-                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
-                    
-                    pin.addToPhotos(photo)
-                    
-                    
-                    stack.save()
-                    
-                }
-            }
-
-            pin.isDownloaded = true
-        }
-        
+    @IBAction func newCollectionPressed(_ sender: Any) {
+        deletePhotoCollection()
     }
-
+    
+    public func deletePhotoCollection() {
+        for each in fetchedResultController.fetchedObjects!{
+            fetchedResultController.managedObjectContext.delete(each)
+            do {
+                try  fetchedResultController.managedObjectContext.save()
+            } catch {
+                print("There was an error saving")
+            }
+        }
+    }
+    
     public func addPinToView() {
         let lat = CLLocationDegrees(pin.latitude)
         let long = CLLocationDegrees(pin.longitude)
