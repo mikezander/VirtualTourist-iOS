@@ -89,6 +89,10 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Vq-Rz-aCJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="82" height="74"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="44T-0y-RoG">
+                                                    <rect key="frame" x="31" y="27" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
                                         <constraints>
@@ -98,6 +102,7 @@
                                             <constraint firstAttribute="bottom" secondItem="9Vq-Rz-aCJ" secondAttribute="bottom" id="pVp-WN-6IA"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="44T-0y-RoG" id="9AC-D0-IvO"/>
                                             <outlet property="photoImageView" destination="9Vq-Rz-aCJ" id="nkZ-nt-FVW"/>
                                         </connections>
                                     </collectionViewCell>

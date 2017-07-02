@@ -22,9 +22,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     fileprivate let cellsPerRow: CGFloat = 3
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -71,13 +68,10 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     stack.save()
                     
                 }
-                
             }
-            
+
             pin.isDownloaded = true
- 
         }
-        
         
     }
 
@@ -133,26 +127,28 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     
             cell.photoImageView.image = image
         }else{
-            performUIUpdatesOnMain {
-               //activity indicator start animating
-            }
+            performUIUpdatesOnMain { cell.activityIndicator.startAnimating() }
             
             FlickrClient.sharedInstance().loadPhotoFromURL(imagePath: photo.imageURL!) { (imageData, error) in
                 guard error == nil else {
                     print("Error loading photo from URL-\(error)"); return}
                 
-                    photo.imageData = imageData as NSData?
-                    stack.save()
+                photo.imageData = imageData as NSData?
+                stack.save()
+                self.performUIUpdatesOnMain {
+                   
+                    cell.activityIndicator.isHidden = true
+                    cell.activityIndicator.stopAnimating()
+                }
                 
             }
         }
         
-        // ai stop animating
+        
         return cell
             
         }
-            
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         fetchedResultController.managedObjectContext.delete(fetchedResultController.object(at: indexPath))
@@ -166,7 +162,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
 }
-
 
 extension PhotosVC: UICollectionViewDelegateFlowLayout {
 
