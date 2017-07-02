@@ -32,6 +32,8 @@ class MapVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
+        
         loadMapViewDefaults()
         self.mapView.delegate = self
         
@@ -68,9 +70,37 @@ class MapVC: UIViewController{
             stack.save()
         }
     }
+    
+    public func moveToPhotosVC(pin: Pin) {
+        
+        let controller = self.storyboard?.instantiateViewController(withIdentifier:"PhotosVC") as! PhotosVC
+
+        // inject into PhotosVC
+        controller.pin = pin
+        
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 extension MapVC: MKMapViewDelegate {
+    
+    /*func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.pinTintColor = UIColor.red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }*/
     
     public func addAnnotationstoMap(objects: [Any]?) {
         
@@ -121,39 +151,7 @@ extension MapVC: MKMapViewDelegate {
             FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
         }
       
-        moveToPhotosVC(fetchcontroller: fetchedResultsController, pin: pin, view: view)
-    }
-    
-    
-    public func moveToPhotosVC(fetchcontroller: NSFetchedResultsController <NSFetchRequestResult>, pin: Pin, view: MKAnnotationView) {
-
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
-        
-        let fr = NSFetchRequest<Photo>(entityName: "Photo")
-        
-        fr.sortDescriptors = []
-
-        let pred = NSPredicate(format: "pin = %@", pin)
-        
-        fr.predicate = pred
-        
-        let fc = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil , cacheName: nil)
-        
-        let controller = self.storyboard?.instantiateViewController(withIdentifier:"PhotosVC") as! PhotosVC
-        
-        do {
-            try fc.performFetch()
-        } catch let err  {
-            print(err)
-        }
-        
-        
-        // inject into PhotosVC
-        controller.fetchedResultController = fc
-        controller.pin = pin
-
-        self.navigationController?.pushViewController(controller, animated: true)
+        moveToPhotosVC(pin: pin)
     }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {

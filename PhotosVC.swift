@@ -1,3 +1,4 @@
+
 //
 //  PinVC.swift
 //  VirtualTourist-iOS
@@ -13,7 +14,7 @@ import CoreData
 
 class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
     var pin: Pin!
-    var fetchedResultController: NSFetchedResultsController <Photo>!
+    //var fetchedResultController: NSFetchedResultsController <Photo>!
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
@@ -22,30 +23,60 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     fileprivate let cellsPerRow: CGFloat = 3
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
+    lazy var fetchedResultsController: NSFetchedResultsController <Photo> = {
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+        fr.sortDescriptors = []
+        let predicate = NSPredicate(format: "pin = %@", self.pin)
+        fr.predicate = predicate
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController as! NSFetchedResultsController<Photo>
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
-        fetchedResultController.delegate = self
+        //fetchedResultsController.delegate = self
         photoCollectionView.allowsMultipleSelection = true
         
         addPinToView()
+        
+        fetchPhotos()
+        print(fetchedResultsController.fetchedObjects?.count as Any)
+        print(pin.photos?.count as Any)
 
         self.photoCollectionView.reloadData()
         
       
  
     }
+    
+    
+    func fetchPhotos() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("Unable to retrieve Photos\nPlease try again.")
+        }
+    }
+    
     @IBAction func newCollectionPressed(_ sender: Any) {
         deletePhotoCollection()
     }
     
     public func deletePhotoCollection() {
-        for each in fetchedResultController.fetchedObjects!{
-            fetchedResultController.managedObjectContext.delete(each)
+        for index in fetchedResultsController.fetchedObjects!{
+            fetchedResultsController.managedObjectContext.delete(index as NSManagedObject)
             do {
-                try  fetchedResultController.managedObjectContext.save()
+                try  fetchedResultsController.managedObjectContext.save()
             } catch {
                 print("There was an error saving")
             }
@@ -74,20 +105,17 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
 
     //MARK: Collection view delegate & data source methods
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let fc = fetchedResultController {
+   /* func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if let fc = fetchedResultsController {
             return (fc.sections?.count)!
         } else {
             return 0
         }
-    }
+    }*/
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let fc = fetchedResultController {
-            return fc.sections![section].numberOfObjects
-        } else {
-            return 0
-        }
+        let sections = fetchedResultsController.sections![section]
+        return sections.numberOfObjects
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -96,7 +124,7 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
  
         let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
-        let photo = fetchedResultController!.object(at: indexPath)
+        let photo = fetchedResultsController.object(at: indexPath)
         
         if let imageData = photo.imageData {
 
@@ -128,10 +156,10 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        fetchedResultController.managedObjectContext.delete(fetchedResultController.object(at: indexPath))
+        fetchedResultsController.managedObjectContext.delete(fetchedResultsController.object(at: indexPath) as NSManagedObject)
         
         do {
-            try  fetchedResultController.managedObjectContext.save()
+            try  fetchedResultsController.managedObjectContext.save()
         } catch {
             print("Error saving photos")
         }
