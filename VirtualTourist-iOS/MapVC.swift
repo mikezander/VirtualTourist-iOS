@@ -147,10 +147,8 @@ extension MapVC: MKMapViewDelegate {
 
         let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
         
-        if !pin.isDownloaded{
-            FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
-        }
-      
+        
+       
         moveToPhotosVC(pin: pin)
     }
 

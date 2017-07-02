@@ -13,8 +13,8 @@ import UIKit
 import CoreData
 
 class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+    
     var pin: Pin!
-    //var fetchedResultController: NSFetchedResultsController <Photo>!
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
@@ -34,52 +34,69 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
-        
+
         return fetchedResultsController as! NSFetchedResultsController<Photo>
     }()
 
-    
+    var i = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
-        //fetchedResultsController.delegate = self
         photoCollectionView.allowsMultipleSelection = true
         
         addPinToView()
-        
+       
         fetchPhotos()
-        print(fetchedResultsController.fetchedObjects?.count as Any)
-        print(pin.photos?.count as Any)
 
-        self.photoCollectionView.reloadData()
-        
-      
- 
+        if !pin.isDownloaded{
+            getPhotosForPin(pin: pin)
+        }
+
+        performUIUpdatesOnMain { self.photoCollectionView.reloadData() }
+
     }
-    
+    public func getPhotosForPin(pin: Pin){
+        
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
+            
+            guard data!.count != 0 else{
+                self.performUIUpdatesOnMain {
+                    self.noPhotosFoundLabel()
+                }
+                return
+            }
+            if let data = data{
+                
+                for each in data{
+                    
+                    let imageUrl = each["url_m"] as! String
+                    
+                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
+                    
+                    pin.addToPhotos(photo)
+                    
+                    
+                    stack.save()
+                    
+                }
+            }
+            
+            pin.isDownloaded = true
+        }
+        
+    }
+
     
     func fetchPhotos() {
         do {
             try fetchedResultsController.performFetch()
+           
         } catch {
             print("Unable to retrieve Photos\nPlease try again.")
-        }
-    }
-    
-    @IBAction func newCollectionPressed(_ sender: Any) {
-        deletePhotoCollection()
-    }
-    
-    public func deletePhotoCollection() {
-        for index in fetchedResultsController.fetchedObjects!{
-            fetchedResultsController.managedObjectContext.delete(index as NSManagedObject)
-            do {
-                try  fetchedResultsController.managedObjectContext.save()
-            } catch {
-                print("There was an error saving")
-            }
         }
     }
     
@@ -103,16 +120,33 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         self.view.addSubview(label)
     }
-
-    //MARK: Collection view delegate & data source methods
-   /* func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let fc = fetchedResultsController {
-            return (fc.sections?.count)!
-        } else {
-            return 0
-        }
-    }*/
     
+    public func deletePhotoCollection() {
+        for index in fetchedResultsController.fetchedObjects!{
+            fetchedResultsController.managedObjectContext.delete(index as NSManagedObject)
+            do {
+                try  fetchedResultsController.managedObjectContext.save()
+            } catch {
+                print("There was an error saving")
+            }
+        }
+    }
+
+    @IBAction func newCollectionPressed(_ sender: Any) {
+        deletePhotoCollection()
+        
+        pin.isDownloaded = false
+        
+        getPhotosForPin(pin: pin)
+        
+        pin.isDownloaded = true
+        
+        print(pin.isDownloaded)
+        performUIUpdatesOnMain {
+            self.photoCollectionView.reloadData()
+        }
+    }
+ 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sections = fetchedResultsController.sections![section]
         return sections.numberOfObjects
@@ -125,12 +159,13 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
         let photo = fetchedResultsController.object(at: indexPath)
-        
+
         if let imageData = photo.imageData {
 
             let image = UIImage(data: imageData as Data)
     
             cell.photoImageView.image = image
+    
         }else{
             performUIUpdatesOnMain { cell.activityIndicator.startAnimating() }
             
@@ -141,7 +176,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
                 photo.imageData = imageData as NSData?
                 stack.save()
                 self.performUIUpdatesOnMain {
-                   
                     cell.activityIndicator.isHidden = true
                     cell.activityIndicator.stopAnimating()
                 }
@@ -149,9 +183,8 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
             }
         }
         
-        
         return cell
-            
+        
         }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

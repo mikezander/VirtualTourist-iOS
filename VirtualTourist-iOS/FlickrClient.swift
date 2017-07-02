@@ -82,6 +82,23 @@ class FlickrClient{
         task.resume()
  
     }
+    
+    public func loadPhotoFromURL(imagePath: String, completionHandler: @escaping (_ imageData: Data?, _ error: String?) -> Void){
+        let session = URLSession.shared
+        let imageURL = URL(string: imagePath)
+        let request = URLRequest(url: imageURL! as URL)
+        
+        let task = session.dataTask(with: request as URLRequest){ data, response, error in
+            guard error == nil else{ completionHandler(nil, "Error downloading image - \(error)")
+                return
+            }
+            
+            completionHandler(data,nil)
+        }
+        
+        task.resume()
+        
+    }
 
     class func sharedInstance() -> FlickrClient {
         struct Singleton {
