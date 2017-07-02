@@ -51,7 +51,7 @@ class MapVC: UIViewController{
 
     @IBAction func addPinTapped(_ sender: UILongPressGestureRecognizer) {
     
-        if sender.state == UIGestureRecognizerState.ended {
+        if sender.state == UIGestureRecognizerState.began {
             let location = sender.location(in: mapView)
             let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
             

@@ -118,6 +118,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="M04-d7-tEU" id="Sa0-ci-rmN"/>
+                                    <outlet property="delegate" destination="M04-d7-tEU" id="4eU-CR-eHa"/>
+                                </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yiC-9d-Xj0">
                                 <rect key="frame" x="0.0" y="627" width="375" height="40"/>

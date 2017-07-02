@@ -40,8 +40,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        photoCollectionView.delegate = self
-        photoCollectionView.dataSource = self
         photoCollectionView.allowsMultipleSelection = true
         
         addPinToView()
