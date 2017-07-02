@@ -89,21 +89,32 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Vq-Rz-aCJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="82" height="74"/>
                                                 </imageView>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="44T-0y-RoG">
-                                                    <rect key="frame" x="31" y="27" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XAe-mn-5QO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="82" height="74"/>
+                                                    <subviews>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="44T-0y-RoG">
+                                                            <rect key="frame" x="31" y="27" width="20" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </activityIndicatorView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="XAe-mn-5QO" secondAttribute="trailing" id="B6o-ej-W3U"/>
                                             <constraint firstItem="9Vq-Rz-aCJ" firstAttribute="top" secondItem="K6k-bD-W1b" secondAttribute="top" id="BKP-FY-GmL"/>
+                                            <constraint firstItem="XAe-mn-5QO" firstAttribute="top" secondItem="K6k-bD-W1b" secondAttribute="top" id="W5Z-M7-EdE"/>
+                                            <constraint firstAttribute="bottom" secondItem="XAe-mn-5QO" secondAttribute="bottom" id="bH3-c2-e2p"/>
+                                            <constraint firstItem="XAe-mn-5QO" firstAttribute="leading" secondItem="K6k-bD-W1b" secondAttribute="leading" id="dBc-ie-hsI"/>
                                             <constraint firstItem="9Vq-Rz-aCJ" firstAttribute="leading" secondItem="K6k-bD-W1b" secondAttribute="leading" id="gmO-cF-49E"/>
                                             <constraint firstAttribute="trailing" secondItem="9Vq-Rz-aCJ" secondAttribute="trailing" id="hY7-CT-1V6"/>
                                             <constraint firstAttribute="bottom" secondItem="9Vq-Rz-aCJ" secondAttribute="bottom" id="pVp-WN-6IA"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="activityIndicator" destination="44T-0y-RoG" id="9AC-D0-IvO"/>
+                                            <outlet property="activityIndicator" destination="44T-0y-RoG" id="wQa-03-vZB"/>
                                             <outlet property="photoImageView" destination="9Vq-Rz-aCJ" id="nkZ-nt-FVW"/>
+                                            <outlet property="placeHolderView" destination="XAe-mn-5QO" id="0kp-er-9ob"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

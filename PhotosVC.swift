@@ -38,7 +38,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         return fetchedResultsController as! NSFetchedResultsController<Photo>
     }()
 
-    var i = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         photoCollectionView.delegate = self
@@ -90,7 +89,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
     }
 
-    
     func fetchPhotos() {
         do {
             try fetchedResultsController.performFetch()
@@ -163,11 +161,17 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         if let imageData = photo.imageData {
 
             let image = UIImage(data: imageData as Data)
-    
-            cell.photoImageView.image = image
-    
+            
+            performUIUpdatesOnMain {
+                cell.placeHolderView.isHidden = true
+                cell.photoImageView.image = image
+            }
+        
         }else{
-            performUIUpdatesOnMain { cell.activityIndicator.startAnimating() }
+            performUIUpdatesOnMain {
+                cell.activityIndicator.startAnimating()
+                cell.placeHolderView.isHidden = false
+            }
             
             FlickrClient.sharedInstance().loadPhotoFromURL(imagePath: photo.imageURL!) { (imageData, error) in
                 guard error == nil else {
@@ -188,7 +192,6 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         fetchedResultsController.managedObjectContext.delete(fetchedResultsController.object(at: indexPath) as NSManagedObject)
         
         do {

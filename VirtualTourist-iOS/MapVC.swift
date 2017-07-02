@@ -31,10 +31,9 @@ class MapVC: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+  
+        performUIUpdatesOnMain { self.loadMapViewDefaults() }
 
-        
-        loadMapViewDefaults()
         self.mapView.delegate = self
         
         var objects: [Any]?
@@ -93,6 +92,7 @@ class MapVC: UIViewController{
                 let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
+    
                 mapView.addAnnotation(annotation)
             }
             
@@ -128,9 +128,7 @@ extension MapVC: MKMapViewDelegate {
         }
 
         let pin = fetchedResultsController.sections?[0].objects?[0] as! Pin
-        
-        
-       
+
         moveToPhotosVC(pin: pin)
     }
 
