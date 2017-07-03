@@ -15,8 +15,9 @@ extension FlickrClient{
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
 
+
         DispatchQueue.main.async {
-        FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
+            FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
 
             if let data = data{
                 

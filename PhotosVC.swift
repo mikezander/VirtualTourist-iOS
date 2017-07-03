@@ -24,7 +24,7 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
     var noPhotosLabel = UILabel()
-    
+
     lazy var fetchedResultsController: NSFetchedResultsController <Photo> = {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
@@ -226,7 +226,7 @@ extension PhotosVC: NSFetchedResultsControllerDelegate {
         
         switch type {
             
-        case .insert: photoCollectionView.insertItems(at: [indexPath!])
+        case .insert: photoCollectionView.insertItems(at: [newIndexPath!])
     
         case .delete: photoCollectionView.deleteItems(at: [indexPath!])
             

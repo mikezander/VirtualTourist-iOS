@@ -11,8 +11,10 @@ import Foundation
 class FlickrClient{
 
     let session = URLSession.shared
+    
+    var pageNumber = 0
    
-    func taskForGETPhotos(latitude: Double, longitude: Double, _ completionHandlerForGET: @escaping (_ success: Bool, _ data: [[String: AnyObject]]?, _ error: String?) -> Void) {
+    func taskForGETPhotos(latitude: Double, longitude: Double,_ completionHandlerForGET: @escaping (_ success: Bool, _ data: [[String: AnyObject]]?, _ error: String?) -> Void) {
         
          let randomNumber = UInt64(arc4random_uniform(50) + 1)
         
