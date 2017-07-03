@@ -23,6 +23,8 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     fileprivate let cellsPerRow: CGFloat = 3
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
+    var noPhotosLabel = UILabel()
+    
     lazy var fetchedResultsController: NSFetchedResultsController <Photo> = {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
@@ -43,6 +45,8 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         photoCollectionView.allowsMultipleSelection = true
         
         addPinToView()
+        
+        performUIUpdatesOnMain { self.noPhotosLabel = self.configNoPhotosLabel()}
        
         fetchPhotos()
 
@@ -60,7 +64,10 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if let observedObject = object as? UICollectionView, observedObject == photoCollectionView {
             //collection view is done loading
-            performUIUpdatesOnMain { self.newCollectionBtn.isEnabled = true }
+            performUIUpdatesOnMain {
+                self.newCollectionBtn.isEnabled = true
+                
+            }
         }
     }
 
@@ -85,14 +92,16 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         mapView.setRegion(region, animated: true)
     }
     
-    public func noPhotosFoundLabel(){
+    public func configNoPhotosLabel()-> UILabel{
         let label = UILabel()
         label.text = "No photos found for this location."
-        label.textAlignment = .center
+        label.isHidden = true
         label.frame = CGRect(x:self.view.frame.size.width/10,y: self.view.frame.size.height/2,width: 300,height: 60)
         
         self.view.addSubview(label)
+        return label
     }
+   
     
     public func deletePhotoCollection() {
         for index in fetchedResultsController.fetchedObjects!{
@@ -106,6 +115,7 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
 
     @IBAction func newCollectionPressed(_ sender: Any) {
+ 
         deletePhotoCollection()
         
         pin.isDownloaded = false
@@ -125,8 +135,11 @@ class PhotosVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         let sections = fetchedResultsController.sections![section]
         
         if sections.numberOfObjects == 0{
-            performUIUpdatesOnMain { self.noPhotosFoundLabel()}
+            performUIUpdatesOnMain { self.noPhotosLabel.isHidden = false }
+        }else{
+            performUIUpdatesOnMain { self.noPhotosLabel.isHidden = true }
         }
+        
         return sections.numberOfObjects
     }
     
