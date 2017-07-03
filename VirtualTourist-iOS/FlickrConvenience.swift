@@ -14,26 +14,32 @@ extension FlickrClient{
         
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
-        
+
+        DispatchQueue.main.async {
         FlickrClient.sharedInstance().taskForGETPhotos(latitude: pin.latitude, longitude: pin.longitude){(success, data, error) in
 
             if let data = data{
                 
                 for each in data{
                     
-                    let imageUrl = each["url_m"] as! String
+                    let imageUrl = each[Constants.FlickrParameterValues.MediumURL] as! String
                     
-                    let photo = Photo(image: nil, imageURL: imageUrl, context: stack.context)
+                   
+                        let photo = Photo(imageData: nil, imageURL: imageUrl, context: stack.context)
                     
-                    pin.addToPhotos(photo)
+                        pin.addToPhotos(photo)
                     
-                    stack.save()
+                    
+                        stack.save()
                     
                 }
+                
             }
             
             pin.isDownloaded = true
+            
         }
         
     }
+    } //end DispatchQueue.main.async
 }

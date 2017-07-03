@@ -224,28 +224,20 @@ extension PhotosVC: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
-        if type.rawValue == 1 {
-            performUIUpdatesOnMain {
-                self.photoCollectionView.reloadData()
-            }
+        switch type {
+            
+        case .insert: photoCollectionView.insertItems(at: [indexPath!])
+    
+        case .delete: photoCollectionView.deleteItems(at: [indexPath!])
+            
+        case .update: photoCollectionView.reloadItems(at: [indexPath!])
+            
+        default:
+            return
         }
-        if type.rawValue == 2 {
-            performUIUpdatesOnMain {
-                self.photoCollectionView.reloadData()
-            }
-        }
-        if type.rawValue == 4 {
-            performUIUpdatesOnMain {
-                self.photoCollectionView.reloadData()
-            }
-        }
-        
+    
     }
     
 }
-
-
-
-
 
 

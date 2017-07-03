@@ -2,7 +2,7 @@
 //  Pin+CoreDataProperties.swift
 //  VirtualTourist-iOS
 //
-//  Created by Michael Alexander on 7/1/17.
+//  Created by Michael Alexander on 7/3/17.
 //  Copyright © 2017 Michael Alexander. All rights reserved.
 //
 

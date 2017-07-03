@@ -65,9 +65,11 @@ class MapVC: UIViewController{
             
             // add pin to map
             mapView.addAnnotation(annotation)
-
+            
+            if !pin.isDownloaded{
             FlickrClient.sharedInstance().getPhotosForPin(pin: pin)
-
+            }
+           
             stack.save()
         }
     }
@@ -75,7 +77,7 @@ class MapVC: UIViewController{
     public func moveToPhotosVC(pin: Pin) {
         
         let controller = self.storyboard?.instantiateViewController(withIdentifier:"PhotosVC") as! PhotosVC
-
+        
         // inject into PhotosVC
         controller.pin = pin
         
